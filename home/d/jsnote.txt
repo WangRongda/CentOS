@@ -1,0 +1,265 @@
+<script>...</script>
+放在<head>和<body>里区别：加载顺序不一样，<head>比较早.
+(即按html文档从上到下依次按顺序加载)
+
+<head>
+<script>...</script>  ---1
+</head>
+<body>
+<script>...</script>  ---2
+content:   ---5
+...
+...
+<script>...</script>  ---3
+</body>
+
+加载顺序: 1 > 2 > 5 > 3
+
+------------------------
+js 标识符以 字母，$，_ 开头
+变量名：小写开头的单词+ 大写开头的单词:  camelCase
+
+It's a good programming practice to declare all variables at the beginning of a script.
+
+If you re-declare a JavaScript variable, it will not lose its value.
+
+var x = 1 + "5" + 2 + 3;
+则x的值为 "1523";
+var x = "5" + 2 + 3;
+则x的值为 "523";
+var x = 1 + 2 + "5" + 2 + 3;
+则x的值为 "3523";
+The rule is: If you add a number and a string, the result will be a string!
+
+10 ** 5 : 10的5次幂
+
+typeof : string,number,boolean,object(array), undefined
+
+ typeof "John"                // Returns "string"
+typeof 3.14                  // Returns "number"
+typeof Infinity/NaN					// Returns "number"
+typeof false                 // Returns "boolean"
+typeof [1,2,3,4]             // Returns "object" (not "array", see note below)
+typeof {name:'John', age:34} // Returns "object" 
+typeof null					// Returns "object"
+typeof undefined			 // Returns "undefined"
+The typeof operator returns "object" for arrays because in JavaScript arrays are objects.
+how to know a array ? : Array.isArray(fruits);     // returns true
+
+var person = null;           // Value is null, but type is still an object
+var person = undefined;     // Value is undefined, type is undefined
+
+Difference Between Undefined and Null:
+typeof undefined             // undefined
+typeof null                  // object
+null === undefined           // false
+null == undefined            // true
+
+ var y = 123e5;      // 12300000
+var z = 123e-5;     // 0.00123
+
+
+JavaScript has only one type of number.
+JavaScript Numbers are Always 64-bit Floating Point
+This format stores numbers in 64 bits, where the number (the fraction) is stored in bits 0 to 51, the exponent in bits 52 to 62, and the sign in bit 63
+
+
+isNaN(x);
+x = 5; // returns false
+x = "5"; // returns false
+x = "string" // returns true 
+
+x =	9.655
+x.toFixed(2)  // returns 9.65
+x = 9.656
+x.toFixed(2)  // returns 9.66
+五舍六入
+
+
+Math.floor(Math.random() * 11);      // returns a number between 0 and 10 
+ Math.floor(Math.random() * 101);     // returns a number between 0 and 100 
+
+Math.floor(Math.random() * (max - min) ) + min;  // returns a random number between min (included) and max (excluded)
+
+Math.floor(Math.random() * (max - min + 1)) + min // returns a random number between min and max (both included)
+
+var d = new Date("2015-03-25T12:00:00"); 
+
+var d = new Date();
+var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+document.getElementById("demo").innerHTML = days[d.getDay()];
+
+var points = [40, 100, 1, 5, 25, 10];
+points.sort(function(a, b){return a - b});
+
+Sorting an Array in Random Order:
+var points = [40, 100, 1, 5, 25, 10];
+points.sort(function(a, b){return 0.5 - Math.random()}); 
+
+
+false:
+0, -0, "", undefined, null, false, NaN
+
+
+switch () { }  compare is strict( === )
+
+
+In JavaScript there are 5 different data types that can contain values:
+
+    string
+    number
+    boolean
+    object
+    function
+
+There are 3 types of objects:
+
+    Object
+    Date
+    Array
+
+And 2 data types that cannot contain values:
+
+    null
+    undefined
+
+typeof null                   // Returns "object" 
+
+function isArray(myArray) {
+    return myArray.constructor.toString().indexOf("Array") > -1;
+} 
+function isDate(myDate) {
+    return myDate.constructor.toString().indexOf("Date") > -1;
+} 
+
+
+
+"John".constructor                 // Returns "function String()  { [native code] }"
+(3.14).constructor                 // Returns "function Number()  { [native code] }"
+false.constructor                  // Returns "function Boolean() { [native code] }"
+[1,2,3,4].constructor              // Returns "function Array()   { [native code] }"
+{name:'John', age:34}.constructor  // Returns" function Object()  { [native code] }"
+new Date().constructor             // Returns "function Date()    { [native code] }"
+function () {}.constructor         // Returns "function Function(){ [native code] }"
+
+
+
+5 + null    // returns 5         because null is converted to 0
+"5" + null  // returns "5null"   because null is converted to "null"
+"5" + 2     // returns 52        because 2 is converted to "2"
+"5" - 2     // returns 3         because "5" is converted to 5
+"5" * "2"   // returns 10        because "5" and "2" are converted to 5 and 2
+
+
+try { 
+...
+} catch(...) {
+...
+}
+捕获的错误不会再显示在console上，需要在catch { ... } 里处理错误。
+
+Local variables must be declared with the var keyword, otherwise they will become global variables.
+
+ var x1 = {};           // new object
+var x2 = "";           // new primitive string
+var x3 = 0;            // new primitive number
+var x4 = false;        // new primitive boolean
+var x5 = [];           // new array object
+var x6 = /()/;         // new regexp object
+var x7 = function(){}; // new function object
+
+
+var x = 0.1;
+var y = 0.2;
+var z = x + y            // the result in z will not be 0.3
+ var z = (x * 10 + y * 10) / 10;       // z will be 0.3
+
+
+ <script>
+window.onload = downScripts;
+
+function downScripts() {
+    var element = document.createElement("script");
+    element.src = "myScript.js";
+    document.body.appendChild(element);
+}
+</script>
+
+
+创建对象类型（类/构造函数）：
+//区别：有构造函数的对象(new person())创建后有属性和方法，没有构造函数的对象(new Object())创建后没有属性和方法
+function Person(first, last, age, eye) {
+    this.firstName = first;
+    this.lastName = last;
+    this.age = age;
+    this.eyeColor = eye;
+}
+var myFather = new person("John", "Doe", 50, "blue");
+内置对象类型：
+ var x1 = new Object();    // A new Object object
+var x2 = new String();    // A new String object
+var x3 = new Number();    // A new Number object
+var x4 = new Boolean();   // A new Boolean object
+var x5 = new Array();     // A new Array object
+var x6 = new RegExp();    // A new RegExp object
+var x7 = new Function();  // A new Function object
+var x8 = new Date();      // A new Date object 
+Math()对象是全局对象，不能用new创建
+
+创建Object对象用：
+var myObject = {};
+不用 var myObject = new Object();
+创建字符串对象用：
+var myStr = "";
+不用 var myStr = new String();
+...
+能不用new就不用new:
+ var x1 = {};            // new object
+var x2 = "";            // new primitive string
+var x3 = 0;             // new primitive number
+var x4 = false;         // new primitive boolean
+var x5 = [];            // new array object
+var x6 = /()/           // new regexp object
+var x7 = function(){};  // new function object
+
+对象的赋值是传址而不是传值：
+ var person = {firstName:"John", lastName:"Doe", age:50, eyeColor:"blue"}
+
+var x = person;
+x.age = 10;           // This will change both x.age and person.age 
+
+适用于大部分对象的深度复制(Deep Copy):
+function clone(obj) {
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        var copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        var copy = [];
+        for (var i = 0, var len = obj.length; i < len; ++i) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        var copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+}
+
+parameters : 形参
+arguments：实参

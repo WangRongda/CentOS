@@ -1,0 +1,736 @@
+###################################################################################################
+设置X11端口转发
+X11Forwarding yes
+yum install xorg-x11-xauth
+(关于centOS6或7满足以上两个条件时依旧不能转发，需在/etc/ssh/sshd_config上将AddressFamily any注释并添加AddressFamily inet (ipv6的问题))
+
+安装ns2必要：
+$yum install libX11-devel* xorg-x11-proto-devel* libXt-devel* libXmu-devel
+ns2包中的ls.h 137 this->
+
+###################################################################################################
+yum 查看安装历史信息 : /var/log/yum.log
+getconf LONG_BIT (uname -m / arch ) 查看系统位数 i386/i686 = 32 , x86_64 = 64
+
+netstat -[atunlp]
+-a ：all，表示列出所有的连接，服务监听，Socket资料
+-t ：tcp，列出tcp协议的服务
+-u ：udp，列出udp协议的服务
+-n ：port number， 用端口号来显示
+-l ：listening，列出当前监听服务
+-p ：program，列出服务程序的PID
+
+###################################################################################################
+git pull origin  在bundle/*/ 插件目录下键入跟新插件
+
+git add -A . // add all modify one time
+git add -A //添加所有内容
+gti add . //添加新文件和编辑过的文件不包括删除文件
+git add -u //表示添加编辑或删除文件，不包括新添加的文件
+
+###################################################################################################
+file.tar.xz:
+xz -d file.tar.xz ==> file.tar
+tar xvf file.tar
+
+###################################################################################################
+pkill -kill -t pts/*
+###################################################################################################
+vim 推出Insert模式： <esc> 2. <c-[> 3. Alt+L
+
+####################################################################################################
+rlwrap: 让其他命令行解释器具有bash的补全，上下转到历史命令的功能。
+rlwrap 让tclsh，ns ，sql等命令行下可以用方向键找历史的好东西，还可以自定tab补全，就像bash一样 如rlwrap -cf my_complete_file tclsh 表示指定的文件my_complete_file 中读取补全列表，可在tclsh命令行下使用，供补全的文件很简单，在文件中写入while for if...等词在tclsh中就可输入wh <tab>后补全为 while
+rlwrap 的历史记录放在用户目录下名为  .*_history *为tclsh，ns，等
+file 看文件类型
+stat 看文件详细信息
+ls	 看文件信息
+####################################################################################################
+
+wget:
+-c		断点续传
+-r		递归下载
+-l 2	最大递归深度，这里2层
+-np		不追溯到父目录,仅跟踪到子目录
+-x		创建镜像网站对应的目录结构
+-p		下载有关页面需要用到的所有资源，包括图片和css样式	
+-H		下载时。有用到外部域名的图片或连接。如果需要同时下载
+-L		仅仅跟踪相对链接,可能导致绝对链接的资源没有下载。
+-k		将绝对路径转换为相对路径
+-e robots=off
+		没有这个，会发现下载某些网站时，在当前的download文件夹中只是下载了一个index.html和一个robots.txt，而index.html文件所需要的图片也并没有被下载。因为wget默认会根据网站的robots.txt进行操作，如果robots.txt里是User-agent: * Disallow: /的话，wget是做不了镜像或者下载目录的。这就是前面为什么下载不了图片和其他资源的原因所在了，因为你要爬的HOST禁止蜘蛛去爬它，而wget使用 -e robots=off 这个选项可以通过这个命令绕过这个限制。
+-m		它会打开镜像相关的选项，比如无限深度的子目录递归下载。等价于 -r -N -l inf -nr,  -N为不要下载除非比本地的新
+-P		指定下载到目标文件夹
+-t 1	某个资源下载失败后的重试下载次数
+-q		静默下载，即不显示下载信息，你如果想知道wget当前在下载什么资源的话，可以去掉这个选项
+-w		seconds 资源请求下载之间的等待时间（减轻服务器的压力）
+
+
+常用：
+wget -e robots=off -w 1 -x -np -p -k -m/-r -t 1  递归下载但前目录下所有(仅本站
+wget -e robots=off -w 1 -x -np -p -k -r -l 3  递归下载3层
+
+####################################################################################################
+查看硬链接数和同一硬链接的文件：
+ls -l 第二列的数字： 硬链接数
+查找所有文件file同硬链接的文件：sudo find / -inum `ls -i fileneme | cut -d ' ' -f 1`
+
+####################################################################################################
+a=$(ls)
+echo $a 会列成一行
+echo "$a" 会保留换行
+
+###################################################################################################
+数无形时少直观，形缺数时难入微
+###################################################################################################
+查看带宽：
+nload ~总~带宽
+sudo iftop -n  测量每一个~套接字~连接传输的流量，n选项防止ip解析为主机名，解析本身会带来额外的网络流量
+suod nethogs  查看每个~进程~的带宽
+
+###################################################################################################
+xterm input
+c-a		#toHome
+c-e		#toEnd
+c-w		#delete one word
+c-u		#cut line
+c-y		#paste 
+c-n		#next histroy ( = <down> )
+c-p		#previous history ( = <up> )
+c-l		#clear screen ( = clear )
+c-j		# = <Enter>
+###################################################################################################
+jobs -l (-l查看PID)
+终止进程：kill PID / kill %n
+强制终止: kill  -9 PID ( 15 正常 )
+
+###################################################################################################
+C Language:
+未初始化的指针变量是不可控制的。（不一定为指向NULL，即值不一定为0，和其他普通变量一样，为手动初始化的变量 是否会被编译器默认初始化（0）， 取决于变量定义的位置（如全局变量会被默认初始化为0，而局部变量需要手动初始化，否则编译器不会为你初始化）。所以局部变量中的指针变量为初始化会变成野指针，需要初始化为NULL(0);
+
+c语言数组没有明确的边界，即可越界，数组的地址是连续的，若超出数组大小，则继续连续操作。如 int a[10] ; 则 a[0] ~ a[9] 外，a[10],a[11]照样可用，不会报错，而地址是延续下来的（即超出的也和原来的连续) 
+但是~要避免越界使用~。
+
+gcc: 
+格式化输入 scanf 若指定宽度n（ %n ），则超过宽度会截取前n个，小于则不处理。
+格式化输出 printf 若指定宽度n ， 则小于时补充至n， 超过不会截取。
+
+(1)预处理阶段： gcc -E hello.c -o hello.i(预处理过的c代码)
+(2)编译阶段：   gcc -S hello.i -o hello.s(汇编代码)
+(3)汇编阶段：   gcc -c hello.s -o hello.o(二进制代码)
+(4)链接阶段：   gcc hello.o -o hello (生成可执行文件)
+
+在C语言中，
+NULL和0的值都是一样的，但是为了目的和用途及容易识别的原因，NULL用于指针和对象，0用于数值
+对于字符串的结尾，使用'\0'，它的值也是0(不是'0')，但是让人一看就知道这是字符串的结尾，不是指针，也不是普通的数值
+在不同的系统中，
+NULL并非总是和0等同，NULL仅仅代表空值，也就是指向一个不被使用的地址，在大多数系统中，都将0作为不被使用的地址，所以就有了类似这样的定义
+#define NULL 0
+但并非总是如此，也有些系统不将0地址作为NULL，而是用其他的地址，所以说，千万别将NULL和0等价起来，特别是在一些跨平台的代码中，这更是将给你带来灾难。
+
+指针free后记得要置NULL或指向别的单元。
+
+ void关键字的使用规则：
+
+             1. 如果函数没有返回值，那么应声明为void类型；
+
+             2. 如果函数无参数，那么应声明其参数为void；
+
+             3. 如果函数的参数可以是任意类型指针，那么应声明其参数为void * ；
+
+              4. void不能代表一个真实的变量；
+ex:
+void *v;
+int *i;
+v = i; 或 i = (int *)v
+void *可以是任意类型指针，但其他类型指针如int *，不是任意类型，所有将 （void *）赋给int * 要强制转换为int *
+
+void体现了一种抽象，这个世界上的变量都是“有类型”的
+
+编译器内置宏，这些宏定义不仅可以帮助我们完成跨平台的源码编写，灵活使用也可以巧妙地帮我们输出非常有用的调试信息。例如：
+printf("FILE: %d,  LINE: %d, %s/n", "__FILE__, __LINE__,  "这里写上相关信息");
+
+ANSI C标准中几个标准预定义宏：
+__LINE__：在源代码中插入当前源代码行号；
+__FILE__：在源文件中插入当前源文件名；
+__DATE__：在源文件中插入当前的编译日期
+__TIME__：在源文件中插入当前编译时间；
+__STDC__：当要求程序严格遵循ANSI C标准时该标识被赋值为1；
+__cplusplus：当编写C++程序时该标识符被定义。
+
+需要长度为8字节的字符串，则字符数组长度必须大于8，一般为9，最后一个要放\0
+char a[9] = "hello hh";
+
+
+memcpy(void *dest, void *src, size_t n);
+从源src所指的内存地址的起始位置开始拷贝~n个字节~到目标dest所指的内存地址的起始位置中
+使用前应为目标地址分配合适的空间 如：
+memcpy(dest, src, 4*sizeof(int)); 前应先：
+dest = (int *)malloc(4*sizeof(int));
+
+(*a)[]表示*a首先要是一个指针，这个指针指向的数据类型是一个数组，这叫数组指针
+*a[]优先级是先算a[],表示a首先要是一个数组，再算*，就是数组里面每一个元素都是一个指针，这叫指针数组
+int a[][n], b[n];
+int (*pa)[n] = a, *pb = b;
+int(*a)[5]这里的a是行指针,指向的是一个5的数组,那么它的单一跨度为5,即a+1,那么它指向的数值要从首地址向后移动5个位置
+
+
+
+declare function:
+type funName(); // type funName() { ... }
+type funName(int, char); // type funName(int a, char b) { ... }
+###################################################################################################
+ugly people should read more books.
+###################################################################################################
+#find file which size > 100M
+find . -type -f -size +100000k(bytes)
++ 表示 大于
+默认单位 512bytes  , -size 4 表示2048(2k)
+可以指定c（bytes）k（1024bytes） M（1024*1024=1048576bytes）G（...）
+
+find -type 指定文件类型
+find -maxdepth 1 （最大目录层数，1为的当前目录不递归子目录）
+ 
+###################################################################################################
+shell中引号（双引号和单引号）都用来引起一段字符串作为整体，字符串本身包含引号？
+我们用双引号引起单引号展开为单引号字符，用单引号引起双引号展开为双引号字符。
+###################################################################################################
+sed替换 :
+sed 's/regex/str/g'
+单引号用来防止shell对其展开，当正则部分中有元字符，引号是必需的(一般最好都引起,以免shell展开导致意想不到的结果)
+操作：'s/' 对每行进行匹配替换
+替换标志：在做后一个分隔符（/）后加上标志，这些标志可以指明当有多个模式在一行中被匹配，应该如何替换。
+'/g' 全局替换：替换每行中所有匹配到的（默认每行只会替换第一次匹配到的)
+tip: 大多数Unix工具是以每次读一行的方式对文件进行操作的，sed默认也是以行为单位,每次操作一行，因此不能简单跨行匹配，如 用 \/\*.*\*\/ 去匹配以/*开头*/结尾的跨很多行的所有字符）
+
+regex 
+1. 用'\'转义 ： 让元字符失去特殊意义，作为字符本身
+包括: [ ]  . * \  / $ ^ 
+
+2. 用'\'转义：让普通字符变成元字符，具有特殊意义(与1相反)
+\(...\) 分组 (和其他正则匹配有出入，有的正则匹配 ( ) 是元字符，转义后为括号字符，即归入1 ， sed相反）
+\{...\} 匹配个数（同上，有的这则匹配{}作为元字符)
+类似的还有:  ? +  (即匹配重复中：* ? + {n} {n,} {n,m} 只有 * 归到1)
+还有 分支条件 或：|  一个分组\(a\|b\)m 匹配am或bm ;a\|bm 匹配a或bm
+
+
+3. 用'\'结合字母作为元字符：(字母大写表示反义)
+\w	匹配字母或数字或下划线或汉字
+\s	匹配任意空白字符
+\d	匹配数字
+\b	匹配单词的开始或结束
+
+
+4. 在[str]中元字符都失去特殊意义，成为普通字符(除了^放在开头)
+
+5. sed 不支持零宽断言,可以通过分组解决
+
+vim 中用sed 
+:s/.../.../g 只有当前行替换
+:%s/.../.../g 所有行
+
+####################################################################################################
+linux多线程：
+#include<pthread.c>  ( gcc -pthread )
+pthread_t id 线程id类型
+pthread_create(&id, NULL, (void*)functionname, NULL);  ...  functionname() ...
+ 原型：int  pthread_create（（pthread_t  *thread,  pthread_attr_t  *attr,  void  *（*start_routine）（void  *）,  void  *arg）
+功能：创建线程（实际上就是确定调用该线程函数的入口点），在线程创建以后，就开始运行相关的线程函数。
+    说明：thread：线程标识符；
+		  attr：线程属性设置；
+		  start_routine：线程函数的起始地址；
+		  arg：传递给start_routine的参数；
+		  返回值：成功，返回0；出错，返回-1。
+
+函数pthread_join用来等待一个线程的结束
+int pthread_join(pthread_t thread, void **retval);
+pthread_join(thread, NULL);
+
+线程互斥锁: 锁的创建，初始化，销毁，上锁，释放
+pthread_mutex_t
+pthread_mutex_init:
+pthread_mutex_destroy:
+pthread_mutex_lock:
+pthread_mutex_unlock:
+
+一、锁的创建：
+互斥锁结构体类型： pthread_mutex_t mutex;
+~静态创建~：pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+~动态创建~：pthread_mutex_init(&mutex, NULL);
+原型：int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t * attr)
+二、锁的属性：
+互斥锁属性可以由~pthread_mutexattr_init(pthread_mutexattr_t *mattr);~来~初始化~
+可以调用其他的属性设置方法来设置其属性；
+1.互斥锁的范围：可以指定是该进程与其他进程的同步还是同一进程内不同的线程之间的同步。可以设置为
+PTHREAD_PROCESS_SHARE和PTHREAD_PROCESS_PRIVATE。
+~默认是后者~，表示进程内使用锁。可以使用
+int ~pthread_mutexattr_setpshared~(pthread_mutexattr_t *mattr, int pshared)
+~pthread_mutexattr_getshared~(pthread_mutexattr_t *mattr,int *pshared)
+用来设置与获取锁的范围；
+
+2.互斥锁的类型：
+有以下几个取值空间：
+　　PTHREAD_MUTEX_TIMED_NP，这是~缺省值~，也就是普通锁。当一个线程加锁以后，其余请求锁的线程将形成一个等待队列，并在解锁后按优先级获得锁。这种锁策略保证了资源分配的公平性。
+　　PTHREAD_MUTEX_RECURSIVE_NP，嵌套锁，允许同一个线程对同一个锁成功获得多次，并通过多次unlock解锁。如果是不同线程请求，则在加锁线程解锁时重新竞争。
+　　PTHREAD_MUTEX_ERRORCHECK_NP，检错锁，如果同一个线程请求同一个锁，则返回EDEADLK，否则与PTHREAD_MUTEX_TIMED_NP类型动作相同。这样就保证当不允许多次加锁时不会出现最简单情况下的死锁。
+　　PTHREAD_MUTEX_ADAPTIVE_NP，适应锁，动作最简单的锁类型，仅等待解锁后重新竞争。
+
+可以用以下函数获取或设置锁的类型。
+~pthread_mutexattr_settype~(pthread_mutexattr_t *attr , int type)
+~pthread_mutexattr_gettype~(pthread_mutexattr_t *attr , int *type)
+
+三，锁的释放：可以释放占用锁的资源，~前提~：上锁当前是没有被锁的状态。
+pthread_mutex_destroy(&mutex);
+
+四、锁操作
+1.加锁
+2.解锁
+3.测试加锁
+
+1. int pthread_mutex_lock(pthread_mutex_t *mutex);
+2. int pthread_mutex_unlock(pthread_mutex_t *mutex);
+3. int pthread_mutex_trylock(pthread_mutex_t *mutex);
+
+pthread_mutex_trylock()语义与pthread_mutex_lock()类似，不同的是在锁已经被占据时返回EBUSY而不是挂起等待
+
+多线程条件变量
+创建：(和互斥锁一样，两种)
+静态: pthread_cond_t cond=PTHREAD_COND_INITIALIZER
+动态: int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *cond_attr) 第二个参数一般为NULL
+
+销毁：int pthread_cond_destroy(pthread_cond_t *cond)
+
+pthread_cond_wait(&cond, &mutex); 解互斥锁mutex，并进入阻塞，等待cond改变。(该等待函数必须与一个互斥锁配合，防止多个线程同时请求pthread_cond_wait(),即用该函数前要把互斥锁mutex锁上)
+{
+	pthread_mutex_lock(&mutex);
+	...
+	pthread_cond_wait(&cond, &mutex);
+}
+pthread_cond_signal(&cond); cond改变，发送信号，通知等待cond改变的阻塞进程。
+
+
+
+信号量：
+#include <semaphore.h>
+sem_t 信号量数据结构类型（长整型）
+初始化信号量 extern int sem_init((sem_t *__sem, int __pshared, unsigned int __value));
+	sem为指向信号量结构的一个指针；
+	pshared不为0时此信号量在进程间共享，否则只能为当前进程的所有线程共享；
+	value给出了信号量的初始值。	
+example: sem_t mutex; sem_init(&mutex, 0, 1); 成功返回0
+
+P操作：函数sem_wait( sem_t *sem )被用来阻塞当前线程直到信号量sem的值大于0，解除阻塞后将sem的值减一，表明公共资源经使用后减少。
+V操作：函数sem_post( sem_t *sem )用来增加信号量的值当有线程阻塞在这个信号量上时，调用这个函数会使其中的一个线程不再阻塞，选择机制同样是由线程的调度策略决定的。
+
+
+
+一个进程同时创建两个线程时，用调度算法调度其中一个先执行其函数，该函数~执行结束后~或~挂起（sleep）~或~阻塞~（pthread_mutex_lock,pthread_cond_wait,sem_wait ..,IO请求时~(scanf等)若另一个线程可调用(没有挂起阻塞IO请求等)时,则将CPU分配给另一个线程。
+
+~信号量用在多线程多任务同步的,而互斥锁是用在多线程多任务互斥的,在有些情况下两者可以互换~
+
+
+内存分配:
+程序的内存分配 
+
+一个由c/C++编译的程序占用的内存分为以下几个部分 
+
+1、栈区（stack）―   由编译器自动分配释放 ，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。 
+
+2、堆区（heap） ―   一般由程序员分配释放， 若程序员不释放，程序结束时可能由OS回收 。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表，呵呵。 
+
+3、全局区（静态区）（static）―，全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域， 未初始化的全局变量和未初始化的静态变量在相邻的另一块区域。 - 程序结束后有系统释放 
+
+4、文字常量区  ―常量字符串就是放在这里的。 程序结束后由系统释放 
+
+5、程序代码区―存放函数体的二进制代码。 
+
+二、例子程序 
+
+这是一个前辈写的，非常详细 
+
+//main.cpp 
+
+int a = 0; 全局初始化区 
+
+char *p1; 全局未初始化区 
+
+main() 
+
+{ 
+
+int b; 栈 
+
+char s[] = "abc"; 栈 
+
+char *p2; 栈 
+
+char *p3 = "123456"; 123456\0在常量区，p3在栈上。 
+
+static int c =0； 全局（静态）初始化区 
+
+p1 = (char *)malloc(10); 
+
+p2 = (char *)malloc(20); 
+
+分配得来得10和20字节的区域就在堆区。 
+
+strcpy(p1, "123456"); 123456\0放在常量区，编译器可能会将它与p3所指向的"123456"优化成一个地方。 
+} 
+
+
+数组和链表的区别：
+从逻辑结构上：
+数组必须事先定义固定的长度（元素个数），不能适应数据动态增减的情况。
+链表进行动态地进行存储分配，
+从内存存储上看：
+（静态）数组从栈中分配空间，是连续的一块固定的空间
+链表从堆中分配空间，自由度大，不连续。
+需要快速访问数据，很少插入删除元素，用数组。
+需要经常插入和删除用链表。
+
+###################################################################################################
+shell:
+
+$#: 传递给脚本或函数的形参个数，不包括脚本名($0)
+
+
+####################################################################################################
+1.生成动态链接库:
+g++ [-m32/-m64] test.cpp test2.cpp -fPIC -shared -o	libtest.so
+	-m32为生成32位的动态链接库，-m64位生成64位的动态链接库，没有为编译器默认位数
+	-shared 该选项指定生成动态连接库（让连接器生成T类型的导出符号表，有时候也生成弱连接W类型的导出符号），不用该标志外部程序无法连接。相当于一个可执行文件
+	-fPIC：表示编译为位置独立的代码，不用此选项的话编译后的代码是位置相关的所以动态载入时是通过代码拷贝的方式来满足不同进程的需要，而不能达到真正代码段共享的目的。
+2.生成静态链接库:
+g++ -m32 hello1.cpp -c -o hello1.o //编译hello1.cpp 生成中间文件hello1.o 
+g++ -m32 hello2.cpp -c -o hello2.o //编译hello2.cpp 生成中间文件hello2.o 
+ar rcs libhello.a hello2.o hello1.o //将hello1.o和hello2.o添加到静态链接库
+
+1.动态链接：
+g++ main.cpp -L. -ltest -o main
+
+	-L.：表示要连接的库在当前目录中
+	-ltest：编译器查找动态连接库时有隐含的命名规则，即在给出的名字前面加上lib，后面加上.so来确定库的名称
+
+测试可执行程序main是否已经链接的动态库libtest.so，如果列出了libtest.so，那么就说明正常链接了。可以执行以下命令：
+$ ldd main
+	执行main可以看看main是否调用了动态链接库中的函数。
+
+2.静态链接：
+g++ main.cpp libhello.a -o main
+
+
+定义:除了以下情况，声明就是定义
+a.声明函数但不包括函数体;
+b.声明包含extern链接限定符，例如:extern int a;
+c.声明既没有初始化语法，也没有函数体;
+d.类声明中声明静态数据成员;
+e.类名字声明;
+f.typedef声明;
+g.using声明或者using指令;
+以上情况适用于C具有的特征，C++则完全适用，一般来说定义要为其对象分配或预留存储空间，而声明则不用。
+
+
+在存储器芯片中，每个存储单元的内容，仍然按照8位数来存放，仍然按照字节来计算。 所以32位cpu，32位地址总线，寻址能力 2^32 = 4G个存储单元的地址号码，所以寻址能力是4GB
+
+进程是资源分配的最小单位，线程是CPU调度的最小单位
+
+
+####################################################################################################
+git
+
+查看:
+git status
+git diff
+git log (过去的版本)
+git relog(未来的版本)
+
+
+操作：
+git init
+git add file (当前修改(工作区)放到暂存区)
+git commit -m " .." (提交暂存区里的所有，即git add之前的修改)
+git commit -a (直接包括git add步骤)
+git reset --hard HEAD (HEAD 当前版本 HEAD^上一个版本呢 HEAD^^(HEAD~2)上上版本  commit_id )
+git checkout -- file (把file在工作区的修改全部撤销,即回到最近一次git add或commit时的状态)
+git reset HEAD file (把file暂存区的修改全部撤销掉，重新放回工作区)
+gir rm
+
+
+
+####################################################################################################
+一个文件的权限取决于这个文件所在目录的权限（一级目录），如一个目录的所有者为 小明，这个目录下的一个文件的所有者为root，小明照样可以取得这个文件的所有权，一旦更改该文件，所有者变成小明。
+
+厚积薄发
+
+####################################################################################################
+linux命令行快捷键：
+C-k: 先按住Ctrl键，然后再按k键；
+M-k：先单击Esc键，然后再按k键。
+  www.2cto.com  
+移动光标：
+C-a：移到行首
+C-e：移到行尾
+C-b：往回(左)移动一个字符
+C-f：往后(右)移动一个字符
+M-b：往回(左)移动一个单词
+M-f：往后(右)移动一个单词
+ 
+删除字符：
+C-h：删除光标左方位置的字符
+C-d：删除光标右方位置的字符（注意：当前命令行没有任何字符时，会注销系统或结束终端）
+ 
+删除单词：
+M-d：由光标位置开始，删除单词，直到该单词结束。
+C-w：由光标位置开始，往左删除单词。
+  www.2cto.com  
+删除行：
+C-k：由光标所在位置开始，删除右方所有的字符，直到该行结束。
+C-u：由光标所在位置开始，删除左方所有的字符，直到该行开始。
+C-a C-k  或  C-e C-u 或 C-k C-u 组合可删除整行。
+ 
+C-l：清除屏幕，然后，在最上面重新显示目前光标所在的这一行的内容。
+ 
+复原操作：
+C-_：回复之前的状态。撤销操作。
+ 
+粘贴：
+C-y：把之前删除的字符或字符串，贴到光标所在位置。
+ 
+重复执行操作动作：
+M-操作次数  操作动作： 指定操作次数，重复执行指定的操作。
+ 
+查找历史命令
+C-p：显示当前命令的上一条历史命令
+C-n：显示当前命令的下一条历史命令
+ 
+C-r：搜索历史命令，随着输入会显示历史命令中的一条匹配命令，Enter键执行匹配命令；ESC键在命令行显示而不执行匹配命令。
+
+
+####################################################################################################
+我觉得CLI比UI好用(在学些上，在和图形无关的操作上，如编程，文本处理，管理文件)：
+因为CLI可以直接的告诉操作系统你要干什么，要去哪里，直接跟他说。
+而UI感觉就是需要通过可视化反馈的信息，再继续往下操作，如要去某个目录，先点进他的最上层目录，再一层一层点进去，虽然每一步点完之后都很清楚，下一步点哪，但不是高效的。
+
+
+###################################################################################################
+basic UI (arch)
+pacman -S xorg-server xorg-server-utils xorg-utils xorg-xinit 
+(apt)
+apt-get install xinit
+
+basic sounds:
+apt-get install alsa-util
+shell> alsactl init  #open
+shell> alsamixer  #adjust 
+
+###################################################################################################
+先下载雅黑-Consolas混合字体压缩包，资源地址：
+
+http://download.csdn.net/detail/emycslife/4240737
+
+假定下载到~/download/目录下，我们先在这里把压缩包解压，把解压后的字体的ttf文件复制到/usr/share/fonts/的任意目录下（我是Ubuntu 11.10下测试的）：
+
+sudo mkdir -p /usr/share/fonts/vista
+sudo cp YaHei.Consolas.1.12.ttf /usr/share/fonts/vista/
+
+更改权限：
+
+sudo chmod 644 /usr/share/fonts/vista/*.ttf
+
+安装字体：
+
+cd /usr/share/fonts/vista/
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache -fv
+
+之后我们就可以使用新安装的雅黑-Consolas混合字体字体了。
+
+
+###################################################################################################
+1：检查驱动是否安装成功：
+lspci -nnk | grep -A2 0280 
+
+例如输出显示“Kernel driver in use:ath9k”,记住后面的ath9k，接下来要用到。
+
+2：检查asus_nb_wmi驱动是否正常使用
+lsmod | grep -e ath9k -e asus 
+
+其中ath9k是上面步骤1中的输出。在这一步如果正常情况下是能够看到wifi网卡的驱动以及一个“asus_nb_wmi”的字样输出。
+
+3：检查一下wifi的“Hard blocked”状态。
+rfkill list all 
+
+如果phy0上面显示“Hard blocked:yes”
+
+4：将系统挂起，然后重新唤醒系统，wifi是否能够正常使用？
+
+
+如果上述四个步骤确认下来，那么你的系统就存在了这个bug了，可以通过下面的操作来解决这个问题。
+
+
+解决方法：
+在系统终端中输入如下命令：
+echo "options asus_nb_wmi wapf=4" | sudo tee /etc/modprobe.d/asus_nb_wmi.conf 
+
+
+这样子系统会在开启的时候自动加载华硕wifi驱动的内核模块，重启系统就可以解决这个问题，以后就不需要每次开机都要挂起才能使用wifi了。
+
+no one in this world can understand me
+
+... 2>& 1
+
+信号、消息、数据、信息:
+从通信的角度看，消息是待传输的内容，如文字、图像、语音、~数据~等。
+      消息不能在信道中传输，要将其转换成信号，包括电信号（电通信）或光信号（光通信），信号与消息是一一对应的。在发送端，将消息变成信号发送。在接受端，将收到的信号再转换成消息。
+    信息是隐含于消息中的抽象的东西，它能使受信者的知识状态或对某事物的不确定性发生改变。某消息所含的信息量的大小与该消息发生的概率有关，消息发生的概率越大，所含信息量越小。若概率是1，则所含信息量为0。比如，你告诉别人“太阳从东边出，西边落”，别人会说这是废话，因为是100%发生的，信息量为0。
+   通信的实质：是以信号的形式传递消息，但对受信者有用的是消息所含信息。
+数据，是一种消息。
+
+在电子计算机中，一根导线可以传送的稳定状态只有两种，高电平或者低电平。用二进制表示就是0或1
+
+计算机系统中，所有可用程序控制其工作的设备，必须受到CPU的控制。CPU对外部设备都不能直接控制，如显示器、音响、打印机等。直接控制这些设备进行工作的是插在扩展插槽的接口卡。(扩展插槽上一般插有RAM内存条和各类接口卡)
+
+向显存中写入数据，这些数据会被显示卡输出到显示器上。
+
+i确切的说二维数组名是一个指向常量的二级指针，因为它总是指向固定的地址-指向一列数组的首地址。举个简单的例子，chart a[5][5],a=&a[0],
+而指针数组名也是指向常量二级指针，因为指针数组名总是指向数组的第一个元素。举例，chart *a[5],a=&a[0].
+这两个的唯一区别是a[5][5]占25个字节，而a[5]占字节数是各个元素指向字符串的总长度
+
+
+mygithub token : 420c75618c83eb3ecd49b04052ae7b5e4317f2f0
+
+
+gets(ch) 不会输入回车
+fgets(ch, N, stdin); 若N 大于数组长度，会保留回车
+
+yushu = m % n; 的符号取决于 被除数m
+
+scanf函数返回成功读入的数据项数，读到文件末尾出错时则返回EOF。
+如：
+1
+scanf("%d %d",&a,&b);
+函数返回值为int型。如果a和b都被成功读入，那么scanf的返回值就是2；
+如果只有a被成功读入，返回值为1；
+如果a和b都未被成功读入，返回值为0；
+如果遇到错误或遇到end of file，返回值为EOF。
+
+&&，|| 两边只能是bool类型
+&，| 两边可以是bool类型或者是数值类型
+
+空的类是会占用内存空间的，而且大小是1，原因是C++要求每个实例在内存中都有独一无二的地址。
+（一）类内部的成员变量：
+普通的变量：是要占用内存的，但是要注意对齐原则（这点和struct类型很相似）。
+static修饰的静态变量：不占用内容，原因是编译器将其放在全局变量区。
+（二）类内部的成员函数：
+普通函数：不占用内存。
+虚函数：要占用4个字节，用来指定虚函数的虚拟函数表的入口地址。所以一个类的虚函数所占用的地址是不变的，和虚函数的个数是没有关系的
+
+const int nValue； //nValue是const
+const char *pContent; //*pContent是const, pContent可变
+const (char *) pContent;//pContent是const,*pContent可变
+char* const pContent; //pContent是const,*pContent可变
+const char* const pContent; //pContent和*pContent都是const 
+2)、const在后面，与上面的声明对等
+int const nValue； // nValue是const
+char const * pContent;// *pContent是const, pContent可变
+(char *) const pContent;//pContent是const,*pContent可变
+char* const pContent;// pContent是const,*pContent可变
+char const* const pContent;// pContent和*pContent都是const 
+
+
+虚函数 ：基类指针（指向派生类对象）调用子类的函数而不是自己的函数.
+
+
+#ifdef __X_ = #if defined(__X_)
+#ifndef __X_ = #if !defined(__X_)
+区别在于，后者可以组成复杂的预编译条件，比如
+#if defined (AAA) && defined (BBB)
+xxxxxxxxx
+#endif
+
+#if defined (AAA) || VERSION > 12
+xxxxxxxxx
+#endif
+
+grep字符串查找，awk截取列，until条件操作，sed字符串插入，变量与字符串连接等
+
+temporary variable name: ret, flag
+
+
+return：			遇文件结尾      读取出错     备注
+c_stand:
+scanf()				 EOF(-1)        EOF		第一个参数遇文件夹结尾时返回EOF
+fget()				 NULL(0)		NULL
+
+linuxAPI:
+read()					0			-1
+
+判断结尾 feof()
+判断出错 ferror()
+
+allow forward port (not forward loopback port):
+echo 1 > /proc/sys/net/ipv4/ip_forward
+allow forward any port(include loopback(127.0.0.1) port):
+sysctl -w net.ipv4.conf.wlan0.route_localnet=1
+
+iptables -t nat -A PREROUTING -d <listenaddr> -p tcp --dport <listenport> -j DNAT --to <addr:port>
+
+
+################################
+xinit (for graph)
+xfce4-terminal (for xfce4 ui xterm)
+xfwm4(for window, adjust window size, position)
+xfce4-settings(for setting keyboard, shortcut...)  Notice: must run command 'xfsettingsd' to work !!
+################################
+
+
+字体优先级：
+/etc/fonts/conf.d/65-nonlatin.conf
+
+
+防屏幕撕裂：
+vim /etc/X11/xorg.conf.d/20-intel.conf
+example:
+Section "Device"
+	Identifier "Intel Graphics"
+	Driver "intel"
+	Option "TearFree" "true"
+EndSection
+
+tmux save-buffer - | xclip   // for xterm 
+tmux save-buffer - | xclip -selection clipboard // for chrome and. ...
+
+
+gcc -O ... 优化，编译后可执行程序快
+clang -O ... clang编译器更快！
+
+C/C++:
+如果不对函数内部定义的变量进行初始化，该变量的值将是不确定的。这意味着该变量的值将是它被创建之前，相应内存单元保存的值。
+
+#include <climits>
+short sn = SHRT_MAX; //sn = 32767; short range from -32768 to 32767
+sn++ // sn = -32768
+
+unsigned short us = 0; // range from 0 to 65535
+us-- // us become 65535;
+
+变量的地址，在C语言中，一般写作指针类型。
+不同类型的变量地址，用不同的指针进行保存。
+比如，char 类型的地址，使用char*保存，而int型地址，用int *保存。
+除此外，部分情况下也会采用整型类型来保存变量地址，具体使用何种整型类型，取决于编译器：
+1 16位编译器，地址占16位，2字节，可以使用short或者int保存。
+2 32位编译器，地址占32位，4字节，可以使用int或long保存。
+3 64位编译器，地址占64位，8字节，可以使用long保存。
+不过不推荐使用整型类型保存地址，会带来移植上的不通用。
+——————————————————————————————————————————————————————————————
+　　内存地址指系统 RAM 中的特定位置，通常以十六进制的数字表示。
+　　在8086的实模式下，把某一段寄存器左移4位，然后与地址ADDR相加后被直接送到内存总线上，这个相加后的地址就是内存单元的物理地址，而程序中的这个地址就叫逻辑地址(或叫虚地址)。在80386的保护模式下，这个逻辑地址不是被直接送到内存总线，而是被送到内存管理单元(MMU)。MMU由一个或一组芯片组成，其功能是把逻辑地址映射为物理地址，即进行地址转换。
+——————————————————————————————————————————————————————————————
+
+cin和cout将输入和输出看作是char流
+
+
+vim-snippet/ulsnippet
+
+
